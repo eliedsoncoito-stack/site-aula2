@@ -1,0 +1,244 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(to bottom, #0f0c29, #1a0033);
+    color: #fff;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+header {
+    background: rgba(0, 0, 0, 0.95);
+    position: fixed;
+    width: 100%;
+    z-index: 100;
+    padding: 1rem 5%;
+}
+
+nav {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo h1 {
+    color: #ff00ff;
+    font-size: 2.3rem;
+    text-shadow: 0 0 15px #ff00ff;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: #ff00ff;
+    text-shadow: 0 0 10px #ff00ff;
+}
+
+/* HERO */
+.hero {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)), 
+                url('https://source.unsplash.com/random/1920x1080/?cyberpunk-ai') center/cover;
+    position: relative;
+}
+
+.hero-content {
+    z-index: 2;
+    max-width: 900px;
+    padding: 0 20px;
+}
+
+.hero h1 {
+    font-size: 4.8rem;
+    color: #ff00ff;
+    text-shadow: 0 0 30px #ff00ff;
+    margin-bottom: 10px;
+}
+
+.hero h2 {
+    font-size: 2.2rem;
+    color: #00ffff;
+    margin-bottom: 30px;
+}
+
+.cta-button {
+    background: transparent;
+    color: #ff00ff;
+    border: 3px solid #ff00ff;
+    padding: 15px 40px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.4s;
+    text-transform: uppercase;
+    display: inline-block;
+}
+
+.cta-button:hover {
+    background: #ff00ff;
+    color: #000;
+    box-shadow: 0 0 30px #ff00ff;
+    transform: scale(1.05);
+}
+
+/* Seções */
+.section {
+    padding: 100px 8%;
+    max-width: 1100px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.section h2 {
+    font-size: 3rem;
+    color: #ff00ff;
+    margin-bottom: 50px;
+    text-shadow: 0 0 20px #ff00ff;
+}
+
+/* Grid e Cards */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid #00ffff;
+    padding: 2.5rem;
+    border-radius: 15px;
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.2);
+    transition: all 0.4s;
+}
+
+.card:hover {
+    transform: translateY(-15px);
+    box-shadow: 0 0 40px rgba(255, 0, 255, 0.4);
+    border-color: #ff00ff;
+}
+
+.card h3 {
+    color: #00ffff;
+    margin-bottom: 20px;
+    font-size: 1.6rem;
+}
+
+/* Tips */
+.tips {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.8rem;
+}
+
+.tip-card {
+    background: rgba(255, 0, 255, 0.1);
+    border: 2px solid #ff00ff;
+    padding: 2rem 1.5rem;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(255, 0, 255, 0.3);
+}
+
+.number {
+    font-size: 4rem;
+    font-weight: bold;
+    color: #00ffff;
+    display: block;
+    margin-bottom: 15px;
+}
+
+/* Quiz */
+#quiz-container {
+    max-width: 700px;
+    margin: 0 auto;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 40px;
+    border-radius: 20px;
+    border: 2px solid #ff00ff;
+}
+
+#question {
+    font-size: 1.6rem;
+    margin-bottom: 30px;
+}
+
+.options button {
+    width: 100%;
+    padding: 18px;
+    margin: 12px 0;
+    background: rgba(0, 255, 255, 0.1);
+    color: white;
+    border: 2px solid #00ffff;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.options button:hover {
+    background: #00ffff;
+    color: #000;
+    transform: scale(1.03);
+}
+
+/* Formulário */
+form {
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+input, textarea {
+    padding: 15px;
+    background: rgba(255,255,255,0.05);
+    border: 2px solid #00ffff;
+    color: white;
+    border-radius: 12px;
+    font-size: 1.1rem;
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    border-color: #ff00ff;
+    box-shadow: 0 0 15px #ff00ff;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 60px 20px;
+    background: #000;
+    border-top: 3px solid #ff00ff;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .hero h1 { font-size: 3.2rem; }
+    .hero h2 { font-size: 1.8rem; }
+    .nav-links { gap: 1rem; font-size: 0.95rem; }
+}

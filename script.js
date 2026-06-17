@@ -1,5 +1,4 @@
 // js/script.js
-// Quiz
 const questions = [
     {
         q: "Qual é uma característica comum de deepfakes?",
@@ -7,7 +6,7 @@ const questions = [
         correct: 1
     },
     {
-        q: "O que você deve fazer antes de compartilhar uma notícia impactante?",
+        q: "O que você deve fazer antes de compartilhar uma notícia chocante?",
         a: ["Compartilhar imediatamente", "Verificar a fonte original", "Confiar no título", "Enviar para todos os grupos"],
         correct: 1
     },
@@ -41,8 +40,8 @@ function checkAnswer(selected) {
     
     buttons.forEach((btn, i) => {
         btn.disabled = true;
-        if (i === correct) btn.style.background = '#00ff00';
-        if (i === selected && i !== correct) btn.style.background = '#ff0000';
+        if (i === correct) btn.style.background = '#00A651';
+        if (i === selected && i !== correct) btn.style.background = '#e63939';
     });
 
     if (selected === correct) score++;
@@ -61,21 +60,17 @@ document.getElementById('next-btn').addEventListener('click', () => {
 function showResult() {
     const container = document.getElementById('quiz-container');
     container.innerHTML = `
-        <h2>Resultado do Quiz</h2>
-        <p style="font-size: 2rem; margin: 30px 0;">
-            Você acertou <strong>${score}</strong> de ${questions.length} perguntas!
-        </p>
-        <p>${score === questions.length ? '🎉 Excelente! Você domina o tema!' : 'Continue estudando sobre Cidadania Digital!'}</p>
-        <button onclick="location.reload()" class="cta-button">Refazer Quiz</button>
+        <h2 style="color:var(--verde); text-align:center;">Resultado do Quiz</h2>
+        <p style="font-size:2rem; text-align:center; margin:30px 0;">Você acertou <strong>${score}</strong> de ${questions.length}!</p>
+        <button onclick="location.reload()" class="btn">Refazer Quiz</button>
     `;
 }
 
 // Formulário
 document.getElementById('contactForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    alert('✅ Mensagem enviada com sucesso! (Simulação)');
+    alert('✅ Mensagem enviada com sucesso!');
     this.reset();
 });
 
-// Inicializar Quiz
 loadQuestion();

@@ -1,299 +1,103 @@
+<!-- cidigi/index.html -->
 <!DOCTYPE html>
-<html lang="pt-BR" data-theme="dark">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cidadania Digital & IA — Plataforma Educacional</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>CIDIGI | Cidadania Digital & IA</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
-    <div id="loading-screen">
-        <div class="loader">
-            <div class="spinner"></div>
-            <h2>Carregando Plataforma...</h2>
-            <p>Preparando ambiente de Inteligência Artificial</p>
-        </div>
+    <!-- Loading -->
+    <div id="loading" class="loading">
+        <div class="loader"></div>
+        <h1 class="title-font">CIDIGI</h1>
+        <p>Carregando plataforma...</p>
     </div>
 
+    <!-- Navbar -->
     <nav class="navbar">
         <div class="nav-container">
-            <div class="nav-logo">
-                <i class="fa-solid fa-shield-halved"></i>
-                <span>Cidadania<span class="text-gradient">Digital</span></span>
+            <div class="logo">
+                <span class="logo-icon">🛡️</span>
+                <span class="logo-text">CIDIGI</span>
             </div>
-            <div class="nav-search">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" id="global-search" placeholder="Buscar módulos, jogos...">
+            <div class="nav-links">
+                <a href="#home" onclick="navigateTo('home')">Início</a>
+                <a href="#modulos" onclick="navigateTo('modulos')">Módulos</a>
+                <a href="#interativo" onclick="navigateTo('interativo')">Interativo</a>
+                <a href="#jogos" onclick="navigateTo('jogos')">Jogos</a>
+                <a href="#perfil" onclick="navigateTo('perfil')">Perfil</a>
             </div>
-            <ul class="nav-menu">
-                <li><a href="#" class="nav-link active" data-target="home"><i class="fa-solid fa-house"></i> Início</a></li>
-                <li><a href="#" class="nav-link" data-target="educational"><i class="fa-solid fa-book-open"></i> Módulos</a></li>
-                <li><a href="#" class="nav-link" data-target="quiz-section"><i class="fa-solid fa-graduation-cap"></i> Quiz</a></li>
-                <li><a href="#" class="nav-link" data-target="games-section"><i class="fa-solid fa-gamepad"></i> Jogos</a></li>
-                <li><a href="#" class="nav-link" data-target="profile-section"><i class="fa-solid fa-user"></i> Perfil</a></li>
-            </ul>
-            <div class="nav-actions">
-                <button id="theme-toggle" title="Alternar Modo"><i class="fa-solid fa-moon"></i></button>
-                <div class="user-badge-nav">
-                    <i class="fa-solid fa-award"></i> Nível <span id="nav-level">1</span>
-                </div>
-            </div>
-            <div class="menu-toggle">
-                <i class="fa-solid fa-bars"></i>
-            </div>
+            <button onclick="toggleTheme()" class="theme-btn">🌙</button>
         </div>
     </nav>
 
-    <main class="main-content">
-
-        <section id="home" class="tab-content active">
-            <div class="hero-section">
-                <div class="hero-text">
-                    <span class="badge">Inteligência Artificial & Sociedade</span>
-                    <h1>Navegue com Segurança na Era das <span class="text-gradient">Deepfakes</span></h1>
-                    <p>Desenvolva seu senso crítico, aprenda a identificar desinformação gerada por IA e torne-se um cidadão digital exemplar.</p>
-                    <div class="hero-buttons">
-                        <button class="btn btn-primary" onclick="switchTab('educational')">Começar a Aprender <i class="fa-solid fa-arrow-right"></i></button>
-                        <button class="btn btn-secondary" onclick="switchTab('games-section')">Jogar Agora <i class="fa-solid fa-gamepad"></i></button>
-                    </div>
-                </div>
-                <div class="hero-visual">
-                    <div class="cyber-shield">
-                        <i class="fa-solid fa-brain-circuit"></i>
-                    </div>
-                </div>
-            </div>
-
-            <div class="stats-container">
-                <div class="stat-card">
-                    <h2 class="stat-number" data-target="85">0</h2>
-                    <p>% das pessoas já foram expostas a Fake News</p>
-                </div>
-                <div class="stat-card">
-                    <h2 class="stat-number" data-target="90">0</h2>
-                    <p>% de aumento em Deepfakes de áudio e vídeo</p>
-                </div>
-                <div class="stat-card">
-                    <h2 class="stat-number" data-target="100">0</h2>
-                    <p>% Conteúdo Verificado e Educativo</p>
-                </div>
-            </div>
-
-            <div class="section-title">
-                <h2>Recursos da Plataforma</h2>
-                <p>Explore as ferramentas criadas para sua capacitação digital</p>
-            </div>
-            <div class="grid-cards">
-                <div class="action-card" onclick="switchTab('educational')">
-                    <i class="fa-solid fa-user-shield"></i>
-                    <h3>Módulos Educativos</h3>
-                    <p>Da Inteligência Artificial à LGPD. Textos profundos, casos reais e dicas.</p>
-                </div>
-                <div class="action-card" onclick="switchTab('quiz-section')">
-                    <i class="fa-solid fa-trophy"></i>
-                    <h3>Desafio Quiz</h3>
-                    <p>Teste seus conhecimentos, acumule XP e desbloqueie medalhas exclusivas.</p>
-                </div>
-                <div class="action-card" onclick="switchTab('games-section')">
-                    <i class="fa-solid fa-gamepad"></i>
-                    <h3>Jogos Interativos</h3>
-                    <p>Controle heróis em 2D, classifique notícias e detete manipulações digitais em tempo real.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="educational" class="tab-content">
-            <div class="edu-layout">
-                <aside class="edu-sidebar">
-                    <h3>Módulos de Aprendizado</h3>
-                    <ul id="module-list">
-                        </ul>
-                </aside>
-                <article class="edu-body" id="module-viewer">
-                    </article>
-            </div>
-        </section>
-
-        <section id="quiz-section" class="tab-content">
-            <div class="quiz-container">
-                <div class="quiz-header">
-                    <h2>Desafio de Cidadania Digital</h2>
-                    <div class="quiz-meta">
-                        <span>Nível Atual: <strong id="quiz-difficulty">Fácil</strong></span>
-                        <span>Progresso: <strong id="quiz-progress-text">0/10</strong></span>
-                    </div>
-                    <div class="progress-bar-container">
-                        <div class="progress-fill" id="quiz-progress-bar" style="width: 0%"></div>
-                    </div>
-                    <div class="quiz-timer"><i class="fa-solid fa-clock"></i> Tempo: <span id="timer-count">25</span>s</div>
-                </div>
-
-                <div id="quiz-playground">
-                    <div class="question-box">
-                        <h3 id="quiz-question">A pergunta aparecerá aqui?</h3>
-                    </div>
-                    <div class="options-grid" id="quiz-options">
-                        </div>
-                </div>
-
-                <div id="quiz-feedback" class="feedback-box hidden">
-                    <p id="feedback-text"></p>
-                    <button class="btn btn-primary" id="btn-next-question">Próxima Pergunta</button>
-                </div>
-
-                <div id="quiz-result-screen" class="hidden text-center">
-                    <i class="fa-solid fa-crown award-icon"></i>
-                    <h2>Etapa Concluída!</h2>
-                    <p>Você ganhou <span id="earned-xp" class="text-gradient">0</span> XP e progrediu na sua trilha.</p>
-                    <button class="btn btn-primary" onclick="resetQuiz()">Jogar Novamente</button>
-                </div>
-            </div>
-        </section>
-
-        <section id="games-section" class="tab-content">
-            <div class="section-title">
-                <h2>Central de Jogos Educativos</h2>
-                <p>Pratique seus reflexos digitais e habilidades críticas nos jogos interativos.</p>
-            </div>
-
-            <div class="games-tabs">
-                <button class="tab-btn active" data-game="arcade">Jogo 2D: O Cidadão Digital</button>
-                <button class="tab-btn" data-game="sorting">Fato ou Fake: Arrastar & Classificar</button>
-                <button class="tab-btn" data-game="memory">Jogo da Memória Digital</button>
-            </div>
-
-            <div id="game-arcade-wrapper" class="game-window active">
-                <div class="game-ui">
-                    <span><i class="fa-solid fa-heart text-danger"></i> Vidas: <span id="game-lives">3</span></span>
-                    <span><i class="fa-solid fa-star text-warning"></i> Pontos: <span id="game-score">0</span></span>
-                    <span>Fase: <span id="game-level-indicator">1</span></span>
-                </div>
-                <div class="canvas-container">
-                    <canvas id="gameCanvas" width="800" height="400"></canvas>
-                    <div id="game-overlay" class="game-overlay">
-                        <h3>O Cidadão Digital 2D</h3>
-                        <p>Use as teclas <strong>W, A, S, D</strong> para mover o escudo digital verde.</p>
-                        <p>Colete as <strong>Esferas Verdes (Fatos/Dicas)</strong> e desvie dos <strong>Cubos Vermelhos (Deepfakes/Fake News)</strong>.</p>
-                        <button class="btn btn-primary" onclick="startGame2D()">Iniciar Missão</button>
-                    </div>
-                </div>
-                <div class="game-controls-tip">
-                    <p><i class="fa-solid fa-keyboard"></i> Controles: W (Cima), A (Esquerda), S (Baixo), D (Direita)</p>
-                </div>
-            </div>
-
-            <div id="game-sorting-wrapper" class="game-window">
-                <div class="sorting-game-container">
-                    <p class="instruction">Arrastar o card para a categoria correta com base na confiabilidade:</p>
-                    <div class="drag-element-container">
-                        <div id="draggable-card" class="drag-card" draggable="true">Carregando conteúdo...</div>
-                    </div>
-                    <div class="drop-zones">
-                        <div class="drop-zone data-trust" data-type="confiavel">
-                            <i class="fa-solid fa-circle-check"></i> Confiável (Fato)
-                        </div>
-                        <div class="drop-zone data-fake" data-type="suspeito">
-                            <i class="fa-solid fa-circle-xmark"></i> Suspeito (Fake/Deepfake)
-                        </div>
-                    </div>
-                    <div id="sorting-score" class="text-center">Pontos: 0</div>
-                </div>
-            </div>
-
-            <div id="game-memory-wrapper" class="game-window">
-                <div class="memory-game-grid" id="memory-grid">
-                    </div>
-                <button class="btn btn-secondary" onclick="initMemoryGame()" style="margin: 20px auto; display: block;">Reiniciar Memória</button>
-            </div>
-        </section>
-
-        <section id="profile-section" class="tab-content">
-            <div class="profile-container">
-                <div class="profile-card-header">
-                    <div class="profile-avatar">
-                        <i class="fa-solid fa-user-astronaut"></i>
-                    </div>
-                    <div class="profile-info">
-                        <h2>Agente da Verdade Digital</h2>
-                        <p>Nível de Cidadania: <span id="profile-level-txt" class="text-gradient">Nível 1</span></p>
-                    </div>
-                </div>
-
-                <div class="profile-stats-grid">
-                    <div class="p-stat">
-                        <h3>Experiência Total</h3>
-                        <p><span id="profile-xp">0</span> XP</p>
-                        <div class="progress-bar-container">
-                            <div class="progress-fill" id="profile-xp-progress" style="width: 0%"></div>
-                        </div>
-                    </div>
-                    <div class="p-stat">
-                        <h3>Quizzes Respondidos</h3>
-                        <p id="profile-quizzes">0</p>
-                    </div>
-                    <div class="p-stat">
-                        <h3>Jogos Concluídos</h3>
-                        <p id="profile-games">0</p>
-                    </div>
-                </div>
-
-                <h3>Medalhas e Conquistas Destravadas</h3>
-                <div class="medals-grid" id="medals-box">
-                    <div class="medal-card locked" id="medal-1">
-                        <i class="fa-solid fa-baby"></i>
-                        <h4>Primeiro Passo</h4>
-                        <p>Iniciou a jornada de segurança.</p>
-                    </div>
-                    <div class="medal-card locked" id="medal-2">
-                        <i class="fa-solid fa-eye"></i>
-                        <h4>Olho de Lince</h4>
-                        <p>Acertou a trilha de quizzes.</p>
-                    </div>
-                    <div class="medal-card locked" id="medal-3">
-                        <i class="fa-solid fa-gamepad"></i>
-                        <h4>Gamer Crítico</h4>
-                        <p>Venceu o jogo 2D.</p>
-                    </div>
-                    <div class="medal-card locked" id="medal-4">
-                        <i class="fa-solid fa-user-ninja"></i>
-                        <h4>Mestre Anti-Fake</h4>
-                        <p>Alcançou o Nível Avançado.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <button id="back-to-top" title="Voltar ao topo"><i class="fa-solid fa-arrow-up"></i></button>
-
-    <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-about">
-                <h3>Cidadania Digital & IA</h3>
-                <p>Uma plataforma educativa e interativa projetada para capacitar comunidades escolares contra os perigos da desinformação automatizada.</p>
-            </div>
-            <div class="footer-links">
-                <h4>Navegação</h4>
-                <ul>
-                    <li><a href="#" onclick="switchTab('home')">Início</a></li>
-                    <li><a href="#" onclick="switchTab('educational')">Módulos Educativos</a></li>
-                    <li><a href="#" onclick="switchTab('quiz-section')">Quiz Técnico</a></li>
-                    <li><a href="#" onclick="switchTab('games-section')">Jogos Interativos</a></li>
-                </ul>
-            </div>
-            <div class="footer-law">
-                <h4>Legislação & Proteção</h4>
-                <p><i class="fa-solid fa-scale-balanced"></i> Alinhado com as diretrizes da LGPD (Lei Geral de Proteção de Dados) e Ética em IA.</p>
+    <!-- HOME -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Cidadania Digital<br>na Era da <span class="gradient-text">Inteligência Artificial</span></h1>
+            <p class="hero-subtitle">Entenda deepfakes, combata desinformação e proteja sua vida digital.</p>
+            <div class="hero-buttons">
+                <button onclick="navigateTo('modulos')" class="btn-primary">Começar a Aprender</button>
+                <button onclick="navigateTo('jogos')" class="btn-secondary">Explorar Jogos</button>
             </div>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 Plataforma Cidadania Digital. Todos os direitos reservados. Conscientização Escolar Segura.</p>
-        </div>
-    </footer>
+    </section>
 
-    <script src="script.js"></script>
+    <!-- MÓDULOS -->
+    <section id="modulos" class="section">
+        <div class="container">
+            <h2 class="section-title">Módulos Educacionais</h2>
+            <div class="modules-grid" id="modules-grid"></div>
+        </div>
+    </section>
+
+    <!-- INTERATIVO (Quiz) -->
+    <section id="interativo" class="section bg-zinc">
+        <div class="container">
+            <h2 class="section-title">Quiz Interativo</h2>
+            <div class="quiz-box" id="quiz-box">
+                <div id="quiz-start">
+                    <button onclick="startQuiz()" class="btn-primary">Iniciar Quiz</button>
+                </div>
+                <div id="quiz-content" class="hidden">
+                    <p id="question-text" class="question"></p>
+                    <div id="options" class="options"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- JOGOS -->
+    <section id="jogos" class="section">
+        <div class="container">
+            <h2 class="section-title">Jogos Educativos</h2>
+            <div class="games-grid">
+                <div class="game-card" onclick="startPlatformer()">
+                    <h3>Defensor Digital</h3>
+                    <p>Plataforma 2D (WASD)</p>
+                    <canvas id="game-canvas" width="700" height="400"></canvas>
+                </div>
+                <div class="game-card" onclick="startMemoryGame()">
+                    <h3>Jogo da Memória</h3>
+                    <p>Segurança Digital</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PERFIL -->
+    <section id="perfil" class="section hidden">
+        <div class="container">
+            <h2 class="section-title">Seu Perfil</h2>
+            <div class="profile-card">
+                <h3>XP: <span id="xp">2450</span></h3>
+                <h3>Nível: 12</h3>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/script.js"></script>
 </body>
 </html>

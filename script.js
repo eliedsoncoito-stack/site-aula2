@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ESTADO GLOBAL DA PLATAFORMA (SISTEMA DE PROGRESSO E XP REAL)
+   ESTADO GLOBAL DA PLATAFORMA
    ========================================================================== */
 const appState = {
     user: {
@@ -14,9 +14,24 @@ const appState = {
     currentModuleIndex: 0
 };
 
-// Carregar progresso salvo localmente se houver
+// Variáveis do Jogo de Escopo Dinâmico (Inicializadas com segurança no DOM)
+let canvas = null;
+let ctx = null;
+let gameInterval = null;
+let gameActive = false;
+let gameScore = 0;
+let lives = 3;
+let player = { x: 50, y: 180, size: 25, speed: 5 };
+let collectibles = [];
+let hazards = [];
+
+const keys = { w: false, a: false, s: false, d: false };
+
+// Recuperar progresso local localmente se houver
 if(localStorage.getItem('cidadania_digital_state')) {
-    Object.assign(appState.user, JSON.parse(localStorage.getItem('cidadania_digital_state')));
+    try {
+        Object.assign(appState.user, JSON.parse(localStorage.getItem('cidadania_digital_state')));
+    } catch(e) { console.error(e); }
 }
 
 function saveToStorage() {
@@ -25,26 +40,36 @@ function saveToStorage() {
 }
 
 /* ==========================================================================
-   LOADING E INICIALIZAÇÃO CORE
+   ORQUESTRADOR DE INICIALIZAÇÃO SEGURA (FAIL-SAFE)
    ========================================================================== */
 window.addEventListener('DOMContentLoaded', () => {
-    // Esconder tela de carregamento
+    
+    // 1. Desliga o Loading de qualquer forma (Prevenção de travamento)
     setTimeout(() => {
         const loader = document.getElementById('loading-screen');
-        loader.style.opacity = '0';
-        setTimeout(() => loader.style.display = 'none', 500);
-    }, 1200);
+        if(loader) {
+            loader.style.opacity = '0';
+            setTimeout(() => loader.style.display = 'none', 400);
+        }
+    }, 800);
 
-    initRouter();
-    initTheme();
-    initStatsAnimator();
-    renderModulesMenu();
-    loadModule(0);
-    initQuizEngine();
-    initSortingGame();
-    initMemoryGame();
-    updateProfileUI();
-    initBackToTop();
+    // 2. Vincula com segurança os componentes do Canvas do jogo
+    canvas = document.getElementById('gameCanvas');
+    if(canvas) ctx = canvas.getContext('2d');
+
+    // 3. Executa as sub-inicializações de forma isolada
+    try { initRouter(); } catch(e) { console.error(e); }
+    try { initTheme(); } catch(e) { console.error(e); }
+    try { initStatsAnimator(); } catch(e) { console.error(e); }
+    try { renderModulesMenu(); } catch(e) { console.error(e); }
+    try { loadModule(0); } catch(e) { console.error(e); }
+    try { initQuizEngine(); } catch(e) { console.error(e); }
+    try { initSortingGame(); } catch(e) { console.error(e); }
+    try { initMemoryGame(); } catch(e) { console.error(e); }
+    try { updateProfileUI(); } catch(e) { console.error(e); }
+    try { initBackToTop(); } catch(e) { console.error(e); }
+    try { initGlobalSearch(); } catch(e) { console.error(e); }
+    try { initKeyboardListeners(); } catch(e) { console.error(e); }
 });
 
 /* --- ROTEADOR INTERNO (SPA) --- */
@@ -53,14 +78,16 @@ function initRouter() {
     links.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
-            const target = link.getAttribute('data-target') || link.getAttribute('onclick')?.match(/'([^']+)'/)[1];
+            const target = link.getAttribute('data-target');
             if(target) switchTab(target);
         });
     });
 
     const toggle = document.querySelector('.menu-toggle');
     const menu = document.querySelector('.nav-menu');
-    toggle.addEventListener('click', () => menu.classList.toggle('mobile-active'));
+    if(toggle && menu) {
+        toggle.addEventListener('click', () => menu.classList.toggle('mobile-active'));
+    }
 }
 
 function switchTab(tabId) {
@@ -73,13 +100,16 @@ function switchTab(tabId) {
     const activeLink = document.querySelector(`.nav-link[data-target="${tabId}"]`);
     if(activeLink) activeLink.classList.add('active');
     
-    document.querySelector('.nav-menu').classList.remove('mobile-active');
+    const menu = document.querySelector('.nav-menu');
+    if(menu) menu.classList.remove('mobile-active');
+    
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-/* --- ALTERNAÇÃO DE TEMA (CLARO/ESCURO) --- */
+/* --- ALTERNAÇÃO DE TEMA --- */
 function initTheme() {
     const btn = document.getElementById('theme-toggle');
+    if(!btn) return;
     btn.addEventListener('click', () => {
         const html = document.documentElement;
         if(html.getAttribute('data-theme') === 'dark') {
@@ -112,13 +142,13 @@ function initStatsAnimator() {
     });
 }
 
-/* --- SISTEMA REATIVO DE RECOMPENSAS (XP, NÍVEL & MEDALHAS) --- */
+/* --- SISTEMA DE RECOMPENSAS (XP & NÍVEL) --- */
 function gainXP(amount) {
     appState.user.xp += amount;
     let nextLevelXp = appState.user.level * 150;
     if(appState.user.xp >= nextLevelXp) {
         appState.user.level++;
-        alert(`🎉 Parabéns! Você subiu para o Nível ${appState.user.level}! Seu escudo digital está mais forte.`);
+        alert(`🎉 Sensacional! Você evoluiu para o Nível ${appState.user.level}! Seu conhecimento crítico aumentou.`);
     }
     checkMedals();
     saveToStorage();
@@ -126,21 +156,25 @@ function gainXP(amount) {
 
 function checkMedals() {
     if(appState.user.xp > 0 && !appState.user.medals.includes('medal-1')) appState.user.medals.push('medal-1');
-    if(appState.user.quizzesDone >= 3 && !appState.user.medals.includes('medal-2')) appState.user.medals.push('medal-2');
+    if(appState.user.quizzesDone >= 1 && !appState.user.medals.includes('medal-2')) appState.user.medals.push('medal-2');
     if(appState.user.gamesDone >= 1 && !appState.user.medals.includes('medal-3')) appState.user.medals.push('medal-3');
-    if(appState.user.level >= 3 && !appState.user.medals.includes('medal-4')) appState.user.medals.push('medal-4');
+    if(appState.user.level >= 2 && !appState.user.medals.includes('medal-4')) appState.user.medals.push('medal-4');
 }
 
 function updateProfileUI() {
-    document.getElementById('nav-level').innerText = appState.user.level;
-    document.getElementById('profile-level-txt').innerText = `Nível ${appState.user.level}`;
-    document.getElementById('profile-xp').innerText = appState.user.xp;
-    document.getElementById('profile-quizzes').innerText = appState.user.quizzesDone;
-    document.getElementById('profile-games').innerText = appState.user.gamesDone;
+    const nLvl = document.getElementById('nav-level');
+    if(nLvl) nLvl.innerText = appState.user.level;
     
-    let targetXp = appState.user.level * 150;
-    let pct = (appState.user.xp / targetXp) * 100;
-    document.getElementById('profile-xp-progress').style.width = `${Math.min(pct, 100)}%`;
+    if(document.getElementById('profile-level-txt')) {
+        document.getElementById('profile-level-txt').innerText = `Nível ${appState.user.level}`;
+        document.getElementById('profile-xp').innerText = appState.user.xp;
+        document.getElementById('profile-quizzes').innerText = appState.user.quizzesDone;
+        document.getElementById('profile-games').innerText = appState.user.gamesDone;
+        
+        let targetXp = appState.user.level * 150;
+        let pct = (appState.user.xp / targetXp) * 100;
+        document.getElementById('profile-xp-progress').style.width = `${Math.min(pct, 100)}%`;
+    }
 
     appState.user.medals.forEach(mId => {
         const element = document.getElementById(mId);
@@ -149,7 +183,7 @@ function updateProfileUI() {
 }
 
 /* ==========================================================================
-   MÓDULOS EDUCACIONAIS (CONTEÚDO EXTENSO E DIDÁTICO)
+   CONTEÚDO DOS MÓDULOS EDUCACIONAIS
    ========================================================================== */
 const eduModules = [
     {
@@ -187,6 +221,7 @@ const eduModules = [
 
 function renderModulesMenu() {
     const list = document.getElementById('module-list');
+    if(!list) return;
     list.innerHTML = '';
     eduModules.forEach((mod, idx) => {
         const li = document.createElement('li');
@@ -203,45 +238,50 @@ function loadModule(index) {
         if(idx === index) item.classList.add('active');
         else item.classList.remove('active');
     });
-    document.getElementById('module-viewer').innerHTML = eduModules[index].content;
-    gainXP(15);
+    const viewer = document.getElementById('module-viewer');
+    if(viewer) viewer.innerHTML = eduModules[index].content;
 }
 
 /* ==========================================================================
-   SISTEMA DE QUIZ TÉCNICO E DE PENSAMENTO CRÍTICO
+   SISTEMA DE QUIZ TÉCNICO
    ========================================================================== */
 const quizQuestions = [
-    { q: "Qual tecnologia principal é usada para criar deepfakes realistas?", o: ["Redes Adversárias Generativas (GANs)", "Planilhas de Excel", "Bancos de dados relacionais simples", "Bluetooth avançado"], a: 0, e: "As GANs colocam duas redes neurais para competir, gerando simulações hiper-realistas de mídia." },
-    { q: "O que caracteriza uma 'bolha digital' nas mídias sociais?", o: ["Uma falha que desconecta a internet", "Algoritmos mostrando apenas o que você concorda", "Vírus que sequestra fotos de perfil", "Ambiente seguro livre de robôs"], a: 1, e: "Algoritmos priorizam o engajamento, exibindo conteúdos similares aos seus gostos anteriores, isolando você em bolhas ideológicas." },
-    { q: "Qual a melhor forma de validar uma notícia suspeita recebida em apps?", o: ["Acreditar se foi enviada por parentes próximos", "Verificar se está em grandes portais de checagem", "Apenas ler o título e compartilhar imediatamente", "Ignorar as leis e assumir que tudo é real"], a: 2, e: "Agências especializadas de checagem validam fatos de forma independente cruzando fontes oficiais." }
+    { q: "Qual tecnologia principal é usada para criar deepfakes realistas?", o: ["Redes Adversárias Generativas (GANs)", "Planilhas de cálculo comuns", "Bancos de dados relacionais estáticos", "Conexão Bluetooth local"], a: 0, e: "As GANs colocam duas redes neurais para competir entre si, gerando mídias sintéticas ultra-realistas." },
+    { q: "O que caracteriza uma 'bolha digital' nas mídias sociais?", o: ["Uma lentidão generalizada na rede", "Algoritmos exibindo apenas conteúdos alinhados ao que você já concorda", "Um antivírus escolar", "Ambiente totalmente seguro contra golpes"], a: 1, e: "Os algoritmos de engajamento priorizam a retenção do usuário exibindo mídias que reforçam suas próprias crenças." },
+    { q: "Qual a melhor postura ao receber um link suspeito prometendo prêmios?", o: ["Compartilhar com amigos para testar", "Clicar imediatamente", "Ignorar e consultar os canais oficiais ou portais de checagem", "Fornecer os dados da LGPD"], a: 2, e: "Cidadãos digitais conscientes desconfiam de ofertas alarmantes e cruzam informações em fontes confiáveis." }
 ];
 
 let currentQuizIndex = 0;
-let quizTimer;
+let quizTimer = null;
 let timeLeft = 25;
 
 function initQuizEngine() {
+    const btnNext = document.getElementById('btn-next-question');
+    if(btnNext) btnNext.addEventListener('click', nextQuizQuestion);
     loadQuizQuestion();
-    document.getElementById('btn-next-question').addEventListener('click', nextQuizQuestion);
 }
 
 function loadQuizQuestion() {
     clearInterval(quizTimer);
     timeLeft = 25;
-    document.getElementById('timer-count').innerText = timeLeft;
     
-    // Iniciar cronômetro do quiz
+    const tCount = document.getElementById('timer-count');
+    if(tCount) tCount.innerText = timeLeft;
+    
     quizTimer = setInterval(() => {
         timeLeft--;
-        document.getElementById('timer-count').innerText = timeLeft;
+        if(tCount) tCount.innerText = timeLeft;
         if(timeLeft <= 0) {
             clearInterval(quizTimer);
-            showQuizFeedback(false, "O tempo esgotou! Fique atento ao cronômetro digital.");
+            showQuizFeedback(false, "O tempo limite esgotou! Mantenha a atenção digital.");
         }
     }, 1000);
 
     const qData = quizQuestions[currentQuizIndex];
-    document.getElementById('quiz-question').innerText = qData.q;
+    const qQuest = document.getElementById('quiz-question');
+    if(!qQuest) return;
+
+    qQuest.innerText = qData.q;
     document.getElementById('quiz-difficulty').innerText = currentQuizIndex === 0 ? "Fácil" : currentQuizIndex === 1 ? "Médio" : "Difícil";
     document.getElementById('quiz-progress-text').innerText = `${currentQuizIndex + 1}/${quizQuestions.length}`;
     document.getElementById('quiz-progress-bar').style.width = `${((currentQuizIndex + 1)/quizQuestions.length)*100}%`;
@@ -271,8 +311,9 @@ function checkQuizAnswer(selectedIdx) {
 function showQuizFeedback(isCorrect, explanation) {
     const feedbackBox = document.getElementById('quiz-feedback');
     const txt = document.getElementById('feedback-text');
+    if(!feedbackBox) return;
+
     feedbackBox.classList.remove('hidden');
-    
     if(isCorrect) {
         txt.innerHTML = `<span style="color:#45f3ff; font-weight:bold;">Correto!</span> ${explanation}`;
         gainXP(30);
@@ -286,13 +327,12 @@ function nextQuizQuestion() {
     if(currentQuizIndex < quizQuestions.length) {
         loadQuizQuestion();
     } else {
-        // Fim do quiz
         document.getElementById('quiz-playground').classList.add('hidden');
         document.getElementById('quiz-feedback').classList.add('hidden');
         document.getElementById('quiz-result-screen').classList.remove('hidden');
         document.getElementById('earned-xp').innerText = quizQuestions.length * 30;
         appState.user.quizzesDone++;
-        gainXP(50);
+        gainXP(40);
     }
 }
 
@@ -303,57 +343,50 @@ function resetQuiz() {
 }
 
 /* ==========================================================================
-   JOGO PRINCIPAL ENGENHARIA 2D (HTML5 CANVAS)
+   JOGO PRINCIPAL 2D (HTML5 CANVAS)
    ========================================================================== */
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
-let gameInterval;
-let gameActive = false;
-
-const player = { x: 50, y: 180, size: 25, speed: 5 };
-let collectibles = [];
-let hazards = [];
-let gameScore = 0;
-let lives = 3;
-
-// Monitoramento do Teclado WASD
-const keys = { w: false, a: false, s: false, d: false };
-window.addEventListener('keydown', (e) => {
-    if(['w','a','s','d','W','A','S','D'].includes(e.key)) keys[e.key.toLowerCase()] = true;
-});
-window.addEventListener('keyup', (e) => {
-    if(['w','a','s','d','W','A','S','D'].includes(e.key)) keys[e.key.toLowerCase()] = false;
-});
+function initKeyboardListeners() {
+    window.addEventListener('keydown', (e) => {
+        if(['w','a','s','d','W','A','S','D'].includes(e.key)) keys[e.key.toLowerCase()] = true;
+    });
+    window.addEventListener('keyup', (e) => {
+        if(['w','a','s','d','W','A','S','D'].includes(e.key)) keys[e.key.toLowerCase()] = false;
+    });
+}
 
 function startGame2D() {
-    document.getElementById('game-overlay').style.display = 'none';
+    const overlay = document.getElementById('game-overlay');
+    if(overlay) overlay.style.display = 'none';
+    
     gameScore = 0; lives = 3; gameActive = true;
     collectibles = []; hazards = [];
+    player.x = 50; player.y = 180;
+
     document.getElementById('game-score').innerText = gameScore;
     document.getElementById('game-lives').innerText = lives;
     
     clearInterval(gameInterval);
-    gameInterval = setInterval(updateGame2D, 1000 / 60); // 60 FPS
+    gameInterval = setInterval(updateGame2D, 1000 / 60);
 }
 
 function updateGame2D() {
-    if(!gameActive) return;
+    if(!gameActive || !canvas) return;
 
-    // Movimentação Segura do Jogador (Teclas W, A, S, D)
+    // Movimentação Segura W, A, S, D
     if(keys.w && player.y > 0) player.y -= player.speed;
     if(keys.s && player.y < canvas.height - player.size) player.y += player.speed;
     if(keys.a && player.x > 0) player.x -= player.speed;
     if(keys.d && player.x < canvas.width - player.size) player.x += player.speed;
 
-    // Lógica Dinâmica de Criação de Entidades
-    if(Math.random() < 0.03) {
+    // Gerador de Entidades
+    if(Math.random() < 0.02) {
         collectibles.push({ x: canvas.width, y: Math.random() * (canvas.height - 20), size: 15, speed: 3 });
     }
-    if(Math.random() < 0.04) {
+    if(Math.random() < 0.03) {
         hazards.push({ x: canvas.width, y: Math.random() * (canvas.height - 25), size: 22, speed: 4 });
     }
 
-    // Processamento de Colecionáveis (Verdades / Fatos)
+    // Colisão de Itens Verdes (Verdades/Fatos)
     collectibles.forEach((item, idx) => {
         item.x -= item.speed;
         if(checkCollision(player, item)) {
@@ -364,7 +397,7 @@ function updateGame2D() {
         }
     });
 
-    // Processamento de Obstáculos perigosos (Deepfakes / Fake news)
+    // Colisão de Obstáculos Vermelhos (Fake News)
     hazards.forEach((haz, idx) => {
         haz.x -= haz.speed;
         if(checkCollision(player, haz)) {
@@ -375,14 +408,10 @@ function updateGame2D() {
         }
     });
 
-    // Filtro de telas de limpeza automática fora de borda
     collectibles = collectibles.filter(i => i.x > -20);
     hazards = hazards.filter(h => h.x > -20);
 
-    // Condição de vitória por pontos na fase
-    if(gameScore >= 100) {
-        endGame2D(true);
-    }
+    if(gameScore >= 60) endGame2D(true);
 
     renderGame2D();
 }
@@ -393,64 +422,46 @@ function checkCollision(r1, r2) {
 }
 
 function renderGame2D() {
+    if(!ctx || !canvas) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Desenho do Jogador (Escudo de Cidadania)
+    // Personagem (Escudo Digital)
     ctx.fillStyle = '#45f3ff';
     ctx.fillRect(player.x, player.y, player.size, player.size);
-    ctx.shadowBlur = 10; ctx.shadowColor = '#45f3ff';
 
-    // Desenho de Colecionáveis (Fato / Dados Seguros)
+    // Dados Confiáveis
     ctx.fillStyle = '#00ffcc';
-    ctx.shadowColor = '#00ffcc';
     collectibles.forEach(item => {
         ctx.beginPath();
         ctx.arc(item.x, item.y, item.size / 2, 0, Math.PI * 2);
         ctx.fill();
     });
 
-    // Desenho de Ameaças Digitais (Deepfakes)
+    // Desinformação / Perigos
     ctx.fillStyle = '#ff007f';
-    ctx.shadowColor = '#ff007f';
     hazards.forEach(haz => {
         ctx.fillRect(haz.x, haz.y, haz.size, haz.size);
     });
-    ctx.shadowBlur = 0; // Reset
 }
 
 function endGame2D(isVictory) {
     gameActive = false;
     clearInterval(gameInterval);
     const overlay = document.getElementById('game-overlay');
+    if(!overlay) return;
+
     overlay.style.display = 'flex';
-    
     if(isVictory) {
-        overlay.innerHTML = `<h3>🏆 Vitória!</h3><p>Você protegeu a comunidade escolar de dados falsos e atingiu 100 pontos!</p>
-                             <button class="btn btn-primary" onclick="startGame2D()">Jogar De Novo</button>`;
+        overlay.innerHTML = `<h3>🏆 Vitória Digital!</h3><p>Você atingiu a pontuação máxima protegendo os dados escolares!</p>
+                             <button class="btn btn-primary" onclick="startGame2D()">Jogar Novamente</button>`;
         appState.user.gamesDone++;
-        gainXP(100);
+        gainXP(60);
     } else {
-        overlay.innerHTML = `<h3>💀 Fim de Jogo</h3><p>As deepfakes comprometeram sua navegação segura.</p>
-                             <button class="btn btn-primary" onclick="startGame2D()">Tentar Novamente</button>`;
+        overlay.innerHTML = `<h3>💀 Fim de Jogo</h3><p>As deepfakes comprometeram sua navegação crítica.</p>
+                             <button class="btn btn-primary" onclick="startGame2D()">Tentar De Novo</button>`;
     }
 }
 
 /* ==========================================================================
-   INTERATIVIDADE EXTRA: GESTÃO DE MINI-JOGOS
-   ========================================================================== */
-document.querySelectorAll('.games-tabs .tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        document.querySelectorAll('.games-tabs .tab-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.game-window').forEach(w => w.classList.remove('active'));
-        
-        btn.classList.add('active');
-        const mode = btn.getAttribute('data-game');
-        if(mode === 'arcade') document.getElementById('game-arcade-wrapper').classList.add('active');
-        if(mode === 'sorting') document.getElementById('game-sorting-wrapper').classList.add('active');
-        if(mode === 'memory') document.getElementById('game-memory-wrapper').classList.add('active');
-    });
-});
-
-/* --- JOGO 2: DRAG AND DROP (CLASSIFICAR CONTEÚDOS) --- */
-const sortingItems = [
-    
+   MINI-JOGOS ADICIONAIS
+   ========================================================

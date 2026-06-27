@@ -1,315 +1,266 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="Plataforma educacional sobre Cidadania Digital, Inteligência Artificial, Deepfakes e Desinformação." />
-<title>CidadaniaIA — Cidadania Digital e Inteligência Artificial</title>
-<link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Site educativo sobre Cidadania Digital, Inteligência Artificial, Deepfakes e Desinformação. Conscientize-se com quizzes, jogos e conteúdo didático." />
+  <title>Cidadania Digital & IA — Deepfakes e Desinformação</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<!-- ===== LOADER ===== -->
-<div id="loader" class="loader">
-  <div class="loader-ring"></div>
-  <p>Carregando plataforma...</p>
-</div>
-
-<!-- ===== HEADER / NAV ===== -->
-<header class="header">
-  <div class="container nav-wrap">
-    <a href="#home" class="logo" data-nav>
-      <span class="logo-mark">⚡</span> Cidadania<span class="accent">IA</span>
-    </a>
-    <nav class="nav" id="nav">
-      <a href="#home" data-nav>Início</a>
-      <a href="#modulos" data-nav>Módulos</a>
-      <a href="#quiz" data-nav>Quiz</a>
-      <a href="#jogos" data-nav>Jogos</a>
-      <a href="#ferramentas" data-nav>Ferramentas</a>
-      <a href="#perfil" data-nav>Perfil</a>
-      <a href="#sobre" data-nav>Sobre</a>
-      <a href="#faq" data-nav>FAQ</a>
-    </nav>
-    <div class="nav-actions">
-      <button id="themeToggle" class="icon-btn" title="Alternar tema">🌙</button>
-      <button id="menuToggle" class="icon-btn mobile-only" title="Menu">☰</button>
+  <div class="a11y-bar" role="region" aria-label="Acessibilidade">
+    <div class="container a11y-container">
+      <div class="a11y-group">
+        <button id="font-dec" aria-label="Diminuir fonte">A-</button>
+        <button id="font-reset" aria-label="Restaurar fonte">A</button>
+        <button id="font-inc" aria-label="Aumentar fonte">A+</button>
+      </div>
+      <button id="contrast-toggle" class="btn-contrast" aria-label="Alternar alto contraste">◐ Contraste / Tema</button>
     </div>
   </div>
-</header>
 
-<main>
+  <div id="scrollProgress" class="scroll-progress"></div>
 
-<!-- ===== HOME ===== -->
-<section id="home" class="section hero">
-  <div class="container hero-grid">
-    <div class="hero-text">
-      <span class="badge">Educação Digital • 2026</span>
-      <h1>Cidadania Digital e <span class="grad">Inteligência Artificial</span></h1>
-      <p class="lead">Entenda o impacto das <strong>deepfakes</strong>, da <strong>desinformação</strong> e das <strong>fake news</strong> — e aprenda a se proteger com pensamento crítico.</p>
-      <div class="cta-row">
-        <a href="#modulos" class="btn btn-primary" data-nav>Começar a estudar</a>
-        <a href="#quiz" class="btn btn-ghost" data-nav>Fazer o Quiz</a>
-      </div>
-      <div class="stats">
-        <div><strong id="statModules">32</strong><span>Módulos</span></div>
-        <div><strong id="statQuestions">120</strong><span>Questões</span></div>
-        <div><strong id="statGames">7</strong><span>Jogos</span></div>
-      </div>
-    </div>
-    <div class="hero-visual">
-      <div class="orb"></div>
-      <div class="card-float card-1">🧠 IA</div>
-      <div class="card-float card-2">🎭 Deepfake</div>
-      <div class="card-float card-3">📰 Fake News</div>
-      <div class="card-float card-4">🛡️ Proteção</div>
-    </div>
-  </div>
-</section>
+  <header class="site-header">
+    <div class="container header-container">
+      <a href="#" class="logo">
+        <span class="logo-mark">⬢</span>
+        <span>CidadaniAI</span>
+      </a>
 
-<!-- ===== MÓDULOS ===== -->
-<section id="modulos" class="section">
-  <div class="container">
-    <header class="section-head">
-      <h2>📚 Módulos Educacionais</h2>
-      <p>Conteúdo organizado por tema. Marque como lido e ganhe XP.</p>
-    </header>
-    <div class="filters">
-      <input id="searchModules" type="search" placeholder="🔍 Buscar módulo..." />
-      <select id="filterCategory">
-        <option value="">Todas categorias</option>
-        <option value="IA">Inteligência Artificial</option>
-        <option value="Deepfake">Deepfakes</option>
-        <option value="FakeNews">Fake News</option>
-        <option value="Seguranca">Segurança</option>
-        <option value="Cidadania">Cidadania Digital</option>
-      </select>
-    </div>
-    <div id="modulesGrid" class="grid grid-3"></div>
-  </div>
-</section>
+      <button id="navToggle" class="nav-toggle" aria-label="Abrir menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
 
-<!-- ===== QUIZ ===== -->
-<section id="quiz" class="section alt">
-  <div class="container">
-    <header class="section-head">
-      <h2>🧩 Quiz Interativo</h2>
-      <p>Teste seus conhecimentos. Acerte e ganhe seu certificado!</p>
-    </header>
+      <nav id="mainNav" class="nav">
+        <a href="#cidadania">Cidadania Digital</a>
+        <a href="#ia">Inteligência Artificial</a>
+        <a href="#deepfakes">Deepfakes</a>
+        <a href="#seguranca">Segurança & Leis</a>
+        <a href="#quiz">Quiz</a>
+        <a href="#jogos">Jogos Interativos</a>
+      </nav>
 
-    <div id="quizSetup" class="quiz-setup">
-      <label>Dificuldade:
-        <select id="quizDifficulty">
-          <option value="facil">Fácil</option>
-          <option value="medio" selected>Médio</option>
-          <option value="dificil">Difícil</option>
-        </select>
-      </label>
-      <label>Nº de questões:
-        <select id="quizCount">
-          <option>5</option><option selected>10</option><option>15</option><option>20</option>
-        </select>
-      </label>
-      <button class="btn btn-primary" id="startQuiz">Iniciar Quiz</button>
-    </div>
-
-    <div id="quizArea" class="quiz-area hidden">
-      <div class="quiz-top">
-        <span id="quizProgress">1/10</span>
-        <span id="quizTimer">⏱ 30s</span>
-        <span id="quizScore">⭐ 0</span>
-      </div>
-      <h3 id="quizQuestion"></h3>
-      <div id="quizOptions" class="quiz-options"></div>
-      <button id="quizNext" class="btn btn-primary hidden">Próxima →</button>
-    </div>
-
-    <div id="quizResult" class="quiz-result hidden"></div>
-  </div>
-</section>
-
-<!-- ===== JOGOS ===== -->
-<section id="jogos" class="section">
-  <div class="container">
-    <header class="section-head">
-      <h2>🎮 Jogos Educativos</h2>
-      <p>Aprenda brincando — 7 jogos diferentes com mecânicas únicas.</p>
-    </header>
-    <div class="grid grid-3" id="gamesGrid">
-      <article class="game-card" data-game="platformer">
-        <div class="game-thumb">🕹️</div>
-        <h3>Caçador da Verdade</h3>
-        <p>Plataforma 2D — WASD para se mover, colete verdades e evite fake news.</p>
-        <button class="btn btn-primary">Jogar</button>
-      </article>
-      <article class="game-card" data-game="memory">
-        <div class="game-thumb">🧠</div>
-        <h3>Memória Digital</h3>
-        <p>Encontre os pares de termos da cidadania digital.</p>
-        <button class="btn btn-primary">Jogar</button>
-      </article>
-      <article class="game-card" data-game="truefalse">
-        <div class="game-thumb">✅</div>
-        <h3>Verdadeiro ou Falso</h3>
-        <p>Decida rapidamente se cada afirmação é verdadeira ou falsa.</p>
-        <button class="btn btn-primary">Jogar</button>
-      </article>
-      <article class="game-card" data-game="wordsearch">
-        <div class="game-thumb">🔤</div>
-        <h3>Caça-Palavras</h3>
-        <p>Encontre termos sobre IA, deepfake e cidadania.</p>
-        <button class="btn btn-primary">Jogar</button>
-      </article>
-      <article class="game-card" data-game="classify">
-        <div class="game-thumb">📦</div>
-        <h3>Classifique a Notícia</h3>
-        <p>Arraste cada notícia para Verdadeira ou Falsa.</p>
-        <button class="btn btn-primary">Jogar</button>
-      </article>
-      <article class="game-card" data-game="realai">
-        <div class="game-thumb">🤖</div>
-        <h3>Real ou IA?</h3>
-        <p>Identifique qual descrição foi feita por humano ou IA.</p>
-        <button class="btn btn-primary">Jogar</button>
-      </article>
-      <article class="game-card" data-game="complete">
-        <div class="game-thumb">📝</div>
-        <h3>Complete a Notícia</h3>
-        <p>Preencha lacunas e descubra se a fonte é confiável.</p>
-        <button class="btn btn-primary">Jogar</button>
-      </article>
-    </div>
-  </div>
-</section>
-
-<!-- ===== FERRAMENTAS ===== -->
-<section id="ferramentas" class="section alt">
-  <div class="container">
-    <header class="section-head">
-      <h2>🛠 Ferramentas</h2>
-      <p>Recursos práticos para checar informações e refletir.</p>
-    </header>
-    <div class="grid grid-2">
-      <div class="tool-card">
-        <h3>🔎 Checklist Anti Fake News</h3>
-        <ul id="checklist">
-          <li><label><input type="checkbox"> Verifiquei a fonte original</label></li>
-          <li><label><input type="checkbox"> Conferi a data da publicação</label></li>
-          <li><label><input type="checkbox"> Pesquisei em pelo menos 2 veículos</label></li>
-          <li><label><input type="checkbox"> Analisei imagens em busca de manipulação</label></li>
-          <li><label><input type="checkbox"> Verifiquei o autor/credenciais</label></li>
-        </ul>
-        <p id="checklistResult" class="muted">Marque os itens para avaliar a confiabilidade.</p>
-      </div>
-      <div class="tool-card">
-        <h3>🧪 Analisador de Notícia</h3>
-        <textarea id="newsText" rows="6" placeholder="Cole aqui o texto da notícia..."></textarea>
-        <button class="btn btn-primary" id="analyzeBtn">Analisar</button>
-        <div id="analyzeResult" class="analyze-result"></div>
+      <div class="search-wrap">
+        <input type="text" id="searchInput" placeholder="Buscar no site..." aria-label="Busca interna" />
+        <div id="searchResults" class="search-results" hidden></div>
       </div>
     </div>
-  </div>
-</section>
+  </header>
 
-<!-- ===== PERFIL ===== -->
-<section id="perfil" class="section">
-  <div class="container">
-    <header class="section-head">
-      <h2>👤 Meu Perfil</h2>
-      <p>Acompanhe seu progresso, XP e medalhas.</p>
-    </header>
-    <div class="profile-grid">
-      <div class="profile-card">
-        <div class="avatar">🧑‍🎓</div>
-        <input id="profileName" placeholder="Seu nome" />
-        <p>Nível <strong id="profileLevel">1</strong></p>
-        <div class="xp-bar"><div id="xpFill"></div></div>
-        <p><strong id="profileXP">0</strong> XP</p>
+  <main>
+    <section class="hero">
+      <div class="container">
+        <span class="badge">Consciência Digital 2026</span>
+        <h1>Navegando na Era da <span class="text-gradient">Inteligência Artificial</span></h1>
+        <p>Aprenda a identificar Deepfakes, combater a desinformação e exercer sua cidadania digital de forma segura e ética.</p>
+        <div class="hero-stats">
+          <div class="stat-card"><h3>+💡</h3><p>Conhecimento Prático</p></div>
+          <div class="stat-card"><h3>+🛡️</h3><p>Proteção Ativa</p></div>
+          <div class="stat-card"><h3>+🎮</h3><p>Jogos Educativos</p></div>
+        </div>
       </div>
-      <div class="profile-card">
-        <h3>🏅 Medalhas</h3>
-        <div id="medalsGrid" class="medals"></div>
-      </div>
-      <div class="profile-card">
-        <h3>📊 Atividades</h3>
-        <ul id="activityLog" class="activity"></ul>
-        <button class="btn btn-ghost" id="resetProgress">Resetar progresso</button>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- ===== SOBRE ===== -->
-<section id="sobre" class="section alt">
-  <div class="container">
-    <header class="section-head">
-      <h2>ℹ️ Sobre o Projeto</h2>
-    </header>
-    <div class="grid grid-2">
-      <div>
-        <p>A <strong>CidadaniaIA</strong> é uma plataforma educacional dedicada a conscientizar estudantes, professores e a comunidade escolar sobre os impactos das <strong>deepfakes</strong>, da <strong>desinformação</strong> gerada por IA e das <strong>fake news</strong>.</p>
-        <p>Promovemos pensamento crítico, ética digital e responsabilidade no uso da tecnologia.</p>
+    <section id="cidadania" class="section-padding">
+      <div class="container">
+        <div class="grid-2">
+          <div>
+            <h2>O que é <span class="text-gradient">Cidadania Digital</span>?</h2>
+            <p>Cidadania digital é o conjunto de direitos, deveres e práticas que orientam o uso seguro, ético e responsável das tecnologias digitais. Assim como na vida real, no espaço digital nossas ações têm impactos coletivos.</p>
+            <div class="card-item">
+              <h4>Os Pilares Fundamentais:</h4>
+              <ul>
+                <li><strong>Respeito:</strong> Empatia nas interações e combate ao cyberbullying.</li>
+                <li><strong>Educação:</strong> Alfabetização midiática e capacidade crítica de leitura de dados.</li>
+                <li><strong>Proteção:</strong> Cuidado com a privacidade e a segurança dos dados pessoais.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="visual-placeholder">🛡️ Cidadania Ativa</div>
+        </div>
       </div>
-      <div>
-        <h3>🎯 Objetivos</h3>
-        <ul class="bullets">
-          <li>Capacitar usuários a identificar conteúdos manipulados</li>
-          <li>Estimular checagem de fontes</li>
-          <li>Promover cidadania digital ativa</li>
-          <li>Oferecer aprendizado lúdico e prático</li>
+    </section>
+
+    <section id="ia" class="section-padding bg-alt">
+      <div class="container">
+        <h2>Inteligência Artificial: Evolução e Conceitos</h2>
+        <p class="section-desc">A IA não é mágica, é ciência. Compreender seu funcionamento ajuda a desmistificar seus riscos e potencialidades.</p>
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-icon">🧠</div>
+            <h3>O que é IA?</h3>
+            <p>Sistemas computacionais capazes de realizar tarefas que normalmente exigiriam inteligência humana, como percepção visual, tomada de decisão e tradução de idiomas.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">📊</div>
+            <h3>Machine Learning</h3>
+            <p>O aprendizado de máquina permite que computadores reconheçam padrões complexos a partir de volumes massivos de dados sem programação manual explícita.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🕸️</div>
+            <h3>Redes Neurais / GANs</h3>
+            <p>Modelos matemáticos inspirados no cérebro humano. As Redes Adversariais Generativas (GANs) usam duas redes competindo entre si para gerar conteúdos inéditos hiper-realistas.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="deepfakes" class="section-padding">
+      <div class="container">
+        <div class="grid-2">
+          <div class="visual-placeholder">🎭 Análise de Mídia</div>
+          <div>
+            <h2>A Ameaça das <span class="text-gradient">Deepfakes</span></h2>
+            <p>Deepfakes são áudios, fotos ou vídeos gerados por IA que substituem o rosto ou a voz de uma pessoa real por simulações perfeitamente convincentes. Embora possuam aplicações benéficas no cinema, são frequentemente usadas para golpes e desinformação política.</p>
+            <div class="alert-box">
+              <strong>Como identificar?</strong> Preste atenção em piscadas raras ou ausentes, falhas na sincronia labial, iluminação inconsistente no rosto e artefatos estranhos ao redor das mãos e orelhas.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="seguranca" class="section-padding bg-alt">
+      <div class="container">
+        <h2>Segurança Digital, Desinformação e Legislação</h2>
+        <div class="grid-2">
+          <div class="card">
+            <h3>Fake News vs. Desinformação</h3>
+            <p>Enquanto a "misinformação" pode ser um erro honesto de compartilhamento, a <strong>desinformação</strong> possui a intenção clara e deliberada de enganar, manipular e causar danos a indivíduos ou instituições.</p>
+            <ul style="margin-top: 1rem;">
+              <li>✅ Sempre verifique em mais de um veículo de imprensa confiável.</li>
+              <li>✅ Consulte agências de checagem de fatos especializadas.</li>
+              <li>✅ Proteja suas contas usando senhas fortes e autenticação em duas etapas (MFA).</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Marcos Legais Fundamentais</h3>
+            <p>O Brasil possui legislações robustas para proteger os cidadãos no ambiente virtual:</p>
+            <ol style="margin-top: 1rem; padding-left: 1.2rem;">
+              <li><strong>LGPD (Lei Geral de Proteção de Dados):</strong> Garante que você tenha o controle sobre como suas informações pessoais são coletadas e tratadas por empresas.</li>
+              <li><strong>Marco Civil da Internet:</strong> Estabelece princípios, garantias, direitos e deveres para o uso da rede no país.</li>
+              <li><strong>Código Penal:</strong> Difamação, calúnia e fraudes cometidas por meio de deepfakes ou desinformação são crimes puníveis.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="quiz" class="section-padding">
+      <div class="container" style="max-width: 700px;">
+        <div class="section-header text-center">
+          <h2>Quiz: Cidadão Digital Exemplar</h2>
+          <p>Teste seus conhecimentos sobre IA, leis digitais e desinformação.</p>
+        </div>
+        <div class="interactive-card">
+          <div class="quiz-header">
+            <span id="quizProgress">Pergunta 1/20</span>
+            <span id="quizScore">Pontos: 0</span>
+          </div>
+          <div class="quiz-bar-wrap"><div id="quizBar" class="quiz-bar"></div></div>
+          <div id="quizBody">
+            </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="jogos" class="section-padding bg-alt">
+      <div class="container">
+        <div class="section-header text-center">
+          <h2>Laboratório Interativo de Aprendizado</h2>
+          <p>Pratique a identificação de ameaças através de mecânicas interativas.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="interactive-card">
+            <h3>🔍 Caça às Deepfakes</h3>
+            <p style="margin-bottom:1rem; font-size:0.9rem; color:var(--muted)">Analise as situações fictícias e decida se a mídia é confiável ou uma manipulação por IA.</p>
+            <div id="huntApp">
+              </div>
+          </div>
+
+          <div class="interactive-card">
+            <h3>🧠 Memória dos Conceitos de IA</h3>
+            <p style="margin-bottom:1rem; font-size:0.9rem; color:var(--muted)">Encontre os pares de símbolos correspondentes aos temas estudados.</p>
+            <div class="mem-controls">
+              <span id="memMoves">Jogadas: 0</span>
+              <button id="memReset" class="btn btn-ghost btn-sm">Reiniciar</button>
+            </div>
+            <div id="memoryBoard" class="memory-board">
+              </div>
+          </div>
+        </div>
+
+        <div class="interactive-card" style="margin-top: 2rem;">
+          <div class="text-center">
+            <h3>🎮 Caçador de Notícias (WASD)</h3>
+            <p style="margin-bottom:1rem; color:var(--muted)">Use as teclas <strong>W, A, S, D</strong> para mover seu avatar. Colete as notícias verdadeiras (✅) e evite fakes (❌) ou deepfakes (🎭).</p>
+          </div>
+          <div class="game-hud">
+            <div id="hudScore">Pontos: 0/20</div>
+            <div id="hudLives">❤️❤️❤️</div>
+            <div id="hudTime">⏱ 60s</div>
+          </div>
+          <div class="canvas-container">
+            <canvas id="wasdGame" width="760" height="360"></canvas>
+            <div id="gameOverlay" class="game-overlay">
+              <h4 id="overlayTitle">Pronto para Jogar?</h4>
+              <p id="overlayText">Colete 20 notícias reais antes que o tempo ou suas vidas acabem!</p>
+              <button id="gameStart" class="btn btn-primary">Iniciar Missão</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="referencias" class="section-padding">
+      <div class="container text-center" style="max-width: 650px;">
+        <h3>Fontes & Referências</h3>
+        <ul class="ref-list text-center">
+          <li>UNESCO. <em>Artificial Intelligence and Digital Citizenship Guide</em> (2024).</li>
+          <li>MIT Media Lab. <em>Detecting Deepfakes Project</em>.</li>
+          <li>Agências de checagem nacionais oficiais: Lupa, Aos Fatos, Comprova.</li>
+          <li>Lei Geral de Proteção de Dados (Lei nº 13.709/2018).</li>
         </ul>
       </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <div class="logo"><span class="logo-mark">⬢</span><span>CidadaniAI</span></div>
+        <p class="muted" style="margin-top:0.5rem">Projeto educativo sobre cidadania digital, inteligência artificial e combate à desinformação.</p>
+      </div>
+      <div>
+        <h4>Conteúdo</h4>
+        <a href="#cidadania">Cidadania Digital</a>
+        <a href="#ia">Inteligência Artificial</a>
+        <a href="#deepfakes">Deepfakes</a>
+      </div>
+      <div>
+        <h4>Interativo</h4>
+        <a href="#quiz">Quiz Completo</a>
+        <a href="#jogos">Minijogos</a>
+      </div>
+      <div>
+        <h4>Sobre</h4>
+        <p class="muted">© <span id="year"></span> CidadaniAI. Desenvolvido para fins puramente educacionais.</p>
+      </div>
     </div>
-  </div>
-</section>
+  </footer>
 
-<!-- ===== FAQ ===== -->
-<section id="faq" class="section">
-  <div class="container">
-    <header class="section-head">
-      <h2>❓ Perguntas Frequentes</h2>
-    </header>
-    <div class="faq" id="faqList"></div>
-  </div>
-</section>
+  <button id="toTop" class="to-top" aria-label="Voltar ao topo">↑</button>
 
-</main>
-
-<!-- ===== FOOTER ===== -->
-<footer class="footer">
-  <div class="container footer-grid">
-    <div>
-      <h3>Cidadania<span class="accent">IA</span></h3>
-      <p>Educação digital para uma sociedade mais consciente.</p>
-    </div>
-    <div>
-      <h4>Navegação</h4>
-      <a href="#home" data-nav>Início</a>
-      <a href="#modulos" data-nav>Módulos</a>
-      <a href="#quiz" data-nav>Quiz</a>
-      <a href="#jogos" data-nav>Jogos</a>
-    </div>
-    <div>
-      <h4>Recursos</h4>
-      <a href="#ferramentas" data-nav>Ferramentas</a>
-      <a href="#perfil" data-nav>Perfil</a>
-      <a href="#faq" data-nav>FAQ</a>
-    </div>
-  </div>
-  <div class="copy">© 2026 CidadaniaIA — Projeto educacional.</div>
-</footer>
-
-<!-- ===== MODAL DE JOGO ===== -->
-<div id="gameModal" class="modal hidden">
-  <div class="modal-box">
-    <button class="modal-close" id="closeModal">✕</button>
-    <h3 id="modalTitle"></h3>
-    <div id="modalBody"></div>
-  </div>
-</div>
-
-<button id="backTop" class="back-top hidden">↑</button>
-
-<script src="app.js"></script>
+  <script src="script.js"></script>
+  <script src="quiz.js"></script>
+  <script src="deepfake.js"></script>
+  <script src="game.js"></script>
+  <script src="memory.js"></script>
 </body>
 </html>
